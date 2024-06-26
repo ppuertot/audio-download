@@ -31,12 +31,13 @@ app.post('/upload', upload.single('audio'), (req, res) => {
     res.json({ 
         url1: `${req.protocol}://${req.get('host')}/public/${req.file.filename}`,
         url2: `${req.protocol}://${req.get('host')}/download/${req.file.filename}`,
-        url3: `${req.protocol}://${req.get('host')}/send_file/${req.file.filename}` 
+        url3: `${req.protocol}://${req.get('host')}/send_file/${req.file.filename}`,
+        url4: `${req.protocol}://${req.get('host')}/stream/${req.file.filename}`  
     });
 });
 
 // Ruta para descargar un archivo de audio específico
-app.get('/download/:filename', (req, res) => {
+app.get('/stream/:filename', (req, res) => {
     const filename = req.params.filename;
     const filePath = path.join(__dirname, 'public', filename);
 
@@ -66,6 +67,18 @@ app.get('/send_file/:filename', (req, res) => {
     const filePath = path.join(__dirname, 'public', filename);
 
     res.sendFile(filePath, err => {
+        if (err) {
+            res.status(404).send('Archivo no encontrado.');
+        }
+    });
+});
+
+// Ruta para descargar un archivo de audio específico
+app.get('/download/:filename', (req, res) => {
+    const filename = req.params.filename;
+    const filePath = path.join(__dirname, 'public', filename);
+
+    res.download(filePath, err => {
         if (err) {
             res.status(404).send('Archivo no encontrado.');
         }
