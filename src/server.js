@@ -1,6 +1,6 @@
 const express = require('express');
 const multer = require('multer');
-const mime = require('mime-types');
+// const mime = require('mime-types');
 const path = require('path');
 const fs = require('fs');
 
@@ -15,8 +15,8 @@ const storage = multer.diskStorage({
         cb(null, 'public/');
     },
     filename: (req, file, cb) => {
-        // cb(null, Date.now() + path.extname(file.originalname)); // Agrega una marca de tiempo al nombre del archivo
-        cb(null, file.originalname)
+        cb(null, Date.now() + path.extname(file.originalname)); // Agrega una marca de tiempo al nombre del archivo
+        // cb(null, file.originalname)
     }
 });
 
@@ -49,12 +49,12 @@ app.get('/stream/:filename', (req, res) => {
         }
         
         // Obtener el tipo MIME
-        const mimeType = mime.lookup(filePath);
-        console.log(mimeType)
+        // const mimeType = mime.lookup(filePath);
+        // console.log(mimeType)
 
         // Configurar el encabezado de la respuesta
         res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
-        res.setHeader('Content-Type', mimeType);
+        res.setHeader('Content-Type', 'audio/wave');
 
         // Crear un stream de lectura y pipe a la respuesta
         const readStream = fs.createReadStream(filePath);
