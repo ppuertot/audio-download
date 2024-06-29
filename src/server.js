@@ -15,7 +15,8 @@ const storage = multer.diskStorage({
         cb(null, 'public/');
     },
     filename: (req, file, cb) => {
-        cb(null, Date.now() + path.extname(file.originalname)); // Agrega una marca de tiempo al nombre del archivo
+        // cb(null, Date.now() + path.extname(file.originalname)); // Agrega una marca de tiempo al nombre del archivo
+        cb(null, file.originalname)
     }
 });
 
@@ -26,8 +27,8 @@ app.post('/upload', upload.single('audio'), (req, res) => {
     if (!req.file) {
         return res.status(400).send('No se cargó ningún archivo.');
     }
-    
-    const fileUrl = `${req.protocol}://${req.get('host')}/public/${req.file.filename}`;
+    console.log(req.file)
+    // const fileUrl = `${req.protocol}://${req.get('host')}/public/${req.file.filename}`;
     res.json({ 
         url1: `${req.protocol}://${req.get('host')}/public/${req.file.filename}`,
         url2: `${req.protocol}://${req.get('host')}/download/${req.file.filename}`,
